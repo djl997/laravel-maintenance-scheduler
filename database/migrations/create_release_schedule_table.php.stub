@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('release_schedule', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->smallInteger('major')->default(1); // version major number
+            $table->smallInteger('minor')->default(0); // version minor number
+            $table->string('patch'); // version patch number
+            
+            $table->timestamp('release_at')->nullable();
+            $table->smallInteger('duration_in_minutes')->default(15);
+
+            $table->string('description')->nullable();
+
+            $table->json('changelog')->nullable();
+
+            $table->string('status')->default('concept'); // 'concept', 'scheduled', 'active', 'completed', 'failed'
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('release_schedule');
+    }
+};

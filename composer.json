@@ -1,0 +1,29 @@
+{
+    "name": "djl997/laravel-release-scheduler",
+    "description": "Package to manage application version, release schedule, changelog and maintenance mode.",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Djl997\\LaravelReleaseScheduler\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dirk Jan",
+            "email": "dirkjan@q2-software.nl"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^6.0|^7.0|^8.0|^9.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Djl997\\LaravelReleaseScheduler\\LaravelReleaseSchedulerServiceProvider"
+            ]
+        }
+    }
+}
