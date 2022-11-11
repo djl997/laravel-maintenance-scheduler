@@ -66,15 +66,37 @@ class ReleaseSchedule extends Model
         ];
     }
 
-    public static function getMaintenanceMessage($dueInDays = 7)
+    public static function getMaintenanceMessage($dueInDays = 7): string
     {
-        $firstScheduledRelease = self::scheduled()->orderBy('release_at')->first();
+        $activeRelease = self::active()->first();
+        
+        if(is_null($activeRelease)) {
+            $firstScheduledRelease = self::scheduled()->orderBy('release_at')->first();
+            
+            if(is_null($firstScheduledRelease)) {
+                return __('No releases scheduled.');
+            }
 
-        return __(':Day om :hour is er onderhoud gepland voor :name. De update zal naar verwachting :minutes duren.', [
-            'day' => $firstScheduledRelease->release_at->translatedFormat('l j F Y'),
-            'hour' => $firstScheduledRelease->release_at->format('H:i'),
-            'name' => env('APP_NAME'),
-            'minutes' => \Carbon\CarbonInterval::minutes($firstScheduledRelease->duration_in_minutes)->cascade()->forHumans()
+            return __(':Day om :hour is er onderhoud gepland voor :app. De update zal naar verwachting :minutes duren.', [
+                'day' => $firstScheduledRelease->release_at->translatedFormat('l j F Y'),
+                'hour' => $firstScheduledRelease->release_at->format('H:i'),
+                'app' => env('APP_NAME'),
+                'minutes' => \Carbon\CarbonInterval::minutes($firstScheduledRelease->duration_in_minutes)->cascade()->forHumans()
+            ]);
+        }
+
+        $diff = $activeRelease->duration_in_minutes - $activeRelease->release_at->diffInMinutes();
+
+        if($diff < 0) {
+            return __('Het onderhoud aan :app duurt langer dan verwacht. Probeer het over :minutes nog eens.', [
+                'app' => env('APP_NAME'),
+                'minutes' => \Carbon\CarbonInterval::minutes($activeRelease->duration_in_minutes / 2)->cascade()->forHumans()
+            ]);
+        }
+
+        return __('Er wordt momenteel onderhoud gepleegd aan :app. We verwachten over :minutes weer bereikbaar te zijn.', [
+            'app' => env('APP_NAME'),
+            'minutes' => \Carbon\CarbonInterval::minutes($diff)->cascade()->forHumans()
         ]);
     }
 
