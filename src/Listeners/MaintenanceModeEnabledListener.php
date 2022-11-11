@@ -25,8 +25,12 @@ class MaintenanceModeEnabledListener
      */
     public function handle(MaintenanceModeEnabled $event)
     {
-        $unscheduledMessage = 'Unscheduled maintenance';
-        $release = ReleaseSchedule::notFailed()->today()->where('description', '!=', $unscheduledMessage)->orderBy('release_at')->first();
+        $unscheduledMessage = __('Unscheduled maintenance');
+        
+        $release = ReleaseSchedule::scheduled()->today()->where(function($query) use ($unscheduledMessage) {
+            $query->where('description', '!=', $unscheduledMessage);
+            $query->orWhereNull('description');
+        })->orderBy('release_at')->first();
         
         if(!is_null($release)) {
             $release->status = ReleaseSchedule::STATUS_ACTIVE;
