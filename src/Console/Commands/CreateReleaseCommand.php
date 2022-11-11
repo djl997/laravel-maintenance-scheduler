@@ -23,7 +23,7 @@ class CreateReleaseCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Schedule a new release.';
+    protected $description = 'Create and schedule a new release including the changelog.';
 
     /**
      * Create a new command instance.

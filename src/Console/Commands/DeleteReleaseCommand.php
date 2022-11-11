@@ -23,7 +23,7 @@ class DeleteReleaseCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Deletes the specified release.';
+    protected $description = 'Delete one specific release.';
 
     /**
      * Create a new command instance.
