@@ -25,6 +25,8 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
             ], 'lrs-migrations');
         }
 
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'release_scheduler');
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateReleaseCommand::class,
