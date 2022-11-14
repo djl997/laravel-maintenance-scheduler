@@ -33,6 +33,10 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
                 ListReleasesCommand::class,
                 DeleteReleaseCommand::class,
             ]);
+
+            $this->publishes([
+                __DIR__.'/../config/config.php' => config_path('release-scheduler.php'),
+            ], 'config');
         }
 
     }
@@ -45,5 +49,7 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(EventServiceProvider::class);
+
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'release-scheduler');
     }
 }

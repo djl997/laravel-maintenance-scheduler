@@ -103,9 +103,9 @@ class ReleaseSchedule extends Model
     private static function initialVersion(): array
     {
         return [
-            'major' => 1,
-            'minor' => 0,
-            'patch' => 0,
+            'major' => config('release-scheduler.major'),
+            'minor' => config('release-scheduler.minor'),
+            'patch' => config('release-scheduler.patch'),
         ];
     }
 
@@ -120,7 +120,7 @@ class ReleaseSchedule extends Model
     public static function scopeSoon($query)
     {
         // TODO: make days configurable
-        return $query->where('release_at', '<=', now()->addDays(7)->startOfDay());
+        return $query->where('release_at', '<=', now()->addDays(config('release-scheduler.soonInDays'))->startOfDay());
     }
 
     public static function scopeToday($query)
