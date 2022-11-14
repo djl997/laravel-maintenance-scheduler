@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/djl997/laravel-release-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-release-scheduler)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-Laravel Release Scheduler is a package to manage your application versions, release schedule, changelog and maintenance mode. The goal is to inform end-users of the maintenance schedule and release notes. This package does not manage automated releases and/or release scripts and/or automatically generated changelogs.
+Laravel Release Scheduler is a package to manage your application versions, release schedule, changelog and maintenance mode. The goal is to inform end-users of the maintenance schedule and release notes. This package does not manage automated releases and/or release scripts and/or automatically publish generated changelogs.
 
 ## Features
 - Generate scheduled human readable maintenance messages.
@@ -18,8 +18,8 @@ Here is a rough roadmap of things to come (not in any specific order):
 
 - [ ] Generate changelog.md file
 - [ ] Configure version structure
-- [ ] Configure first version
-- [ ] Translations (EN, NL)
+- [x] Configure first version
+- [x] Translations (EN, NL, DE)
 
 ## Requirements
 Laravel Release Scheduler requires PHP 8+ and Laravel 8+.
@@ -45,10 +45,10 @@ php artisan releases:create # Wizard to create and schedule a new release
 php artisan releases:delete {releaseID} # Delete one specific release by ID
 ```
 ### Enable Maintenance Mode:
-To activate maintenance mode, run the default Laravel command `php artisan down`. Laravel Release Scheduler will search for scheduled releases that day and activate them. If no releases were scheduled, it will create and activate an unscheduled release automatically.
+To activate maintenance mode, run the default Laravel command `php artisan down`. Laravel Release Scheduler will search for scheduled releases scoped to that date and activate them. Note if no releases were scheduled, there will automatically be an unscheduled release created and activated.
 
 ### Disable Maintenance Mode:
-To deactivate maintenance mode, run `php artisan up`. Laravel Release Scheduler will complete the active release and make it available for the changelog.
+To deactivate maintenance mode, run `php artisan up`. Laravel Release Scheduler will complete the active release and make it available for the changelog. You can copy-paste this e.g. to Github.
 
 ### Show maintenance message:
 ```php
@@ -59,7 +59,7 @@ $message = ReleaseSchedule::getMaintenanceMessage();
 
 ## Contributing
 
-This package is in active development, ideas are welcome.
+This package is in active development, ideas or improvements are welcome.
 
 ## License
 
