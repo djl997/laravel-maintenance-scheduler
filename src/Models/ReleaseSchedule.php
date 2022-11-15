@@ -77,6 +77,13 @@ class ReleaseSchedule extends Model
                 return null;
             }
 
+            if($firstScheduledRelease->release_at->addMinutes($firstScheduledRelease->duration_in_minutes / 2)->isPast()) {
+                return __('release_scheduler::messages.release_at_past_due', [
+                    'app' => env('APP_NAME'),
+                    'minutes' => \Carbon\CarbonInterval::minutes($firstScheduledRelease->duration_in_minutes)->cascade()->forHumans()
+                ]);
+            }
+
             return __('release_scheduler::messages.release_at', [
                 'day' => $firstScheduledRelease->release_at->translatedFormat(__('release_scheduler::messages.day_format')),
                 'hour' => $firstScheduledRelease->release_at->format(__('release_scheduler::messages.time_format')),
@@ -119,8 +126,10 @@ class ReleaseSchedule extends Model
 
     public static function scopeSoon($query)
     {
-        // TODO: make days configurable
-        return $query->where('release_at', '<=', now()->addDays(config('release-scheduler.soonInDays'))->startOfDay());
+        return $query->whereBetween('release_at', [
+            now()->startOfDay(),
+            now()->addDays(config('release-scheduler.soonInDays'))->endOfDay()
+        ]);
     }
 
     public static function scopeToday($query)
