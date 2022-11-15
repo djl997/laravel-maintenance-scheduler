@@ -29,6 +29,10 @@ You can use this package in your project via composer:
 ```bash
 composer require djl997/laravel-release-scheduler
 ```
+Publish migration files:
+```
+php artisan vendor:publish --tag=lrs-migrations
+```
 
 Migrate the required database table `release_schedule`:
 ```bash
@@ -55,6 +59,12 @@ To deactivate maintenance mode, run `php artisan up`. Laravel Release Scheduler 
 use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
 
 $message = ReleaseSchedule::getMaintenanceMessage();
+```
+
+## Custom Configuration
+If you want to change the [default config](config/config.php) you can publish the config file:
+```
+php artisan vendor:publish --tag=lrs-config
 ```
 
 ## Contributing

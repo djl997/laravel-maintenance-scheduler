@@ -36,7 +36,7 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('release-scheduler.php'),
-            ], 'config');
+            ], 'lrs-config');
         }
 
     }

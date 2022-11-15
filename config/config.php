@@ -29,7 +29,4 @@ return [
     */
     'soonInDays' => 7,
 
-    
-
-
 ];
