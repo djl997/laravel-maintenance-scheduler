@@ -65,18 +65,13 @@ class CreateReleaseCommand extends Command
 
         $this->info('Version '. $release->version .' is created!');
 
+        $minutes = (int) now()->format('i') + 2;
+        $minutes = 15 + $minutes - $minutes % 15;
+        $date = now()->startOfHour()->addMinutes($minutes)->format('Y-m-d H:i');
+
         $release->description = $this->ask('What is this release about? Please provide a short description');
-        $release->release_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Release date (Y-m-d H:i)', now()->format('Y-m-d H:i')));
-        $release->duration_in_minutes = (int) $this->choice('Duration in minutes', [
-            5 => '5 minutes', 
-            15 => '15 minutes', 
-            30 => '30 minutes', 
-            60 => '1 hour', 
-            120 => '2 hours', 
-            180 => '3 hours', 
-            240 => '4 hours', 
-            480 => '1 day',
-        ], 15);
+        $release->release_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Release date (Y-m-d H:i)', $date));
+        $release->duration_in_minutes = (int) $this->ask('Duration in minutes', 15);
 
         $release->save();
 
