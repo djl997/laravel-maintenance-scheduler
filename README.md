@@ -17,8 +17,9 @@ Laravel Release Scheduler is a package to manage your application versions, rele
 Here is a rough roadmap of things to come (not in any specific order):
 
 - [ ] Generate changelog.md file
-- [ ] Configure version structure
-- [ ] Add current version to app layout (How to?)
+- [ ] Configure initial version
+- [ ] Connect recalculation to initial version
+- [x] Add current version to app layout (+how to)
 - [x] Configure first version
 - [x] Translations (EN, NL, DE)
 
@@ -61,6 +62,15 @@ use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
 
 $message = ReleaseSchedule::getMaintenanceMessage();
 ```
+
+### Show current version:
+```php
+use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+
+$version = ReleaseSchedule::getCurrentVersion();
+```
+The value is cached in Laravel Cache to prevent unnecessary queries to the database.
+
 
 ## Custom Configuration
 If you want to change the [default config](config/config.php) you can publish the config file:

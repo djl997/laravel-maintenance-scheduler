@@ -3,6 +3,7 @@
 namespace Djl997\LaravelReleaseScheduler\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class ReleaseSchedule extends Model
 {
@@ -25,7 +26,9 @@ class ReleaseSchedule extends Model
      */
     public static function getCurrentVersion()
     {
-        return self::where('status', ReleaseSchedule::STATUS_COMPLETED)->orderByDesc('release_at')->first();
+        return Cache::rememberForever('release-scheduler-version', function() { 
+            return self::where('status', ReleaseSchedule::STATUS_COMPLETED)->orderByDesc('release_at')->first();
+        });
     }
 
     public static function getNextMinorVersion($absolute = true)
@@ -105,6 +108,11 @@ class ReleaseSchedule extends Model
             'app' => env('APP_NAME'),
             'minutes' => \Carbon\CarbonInterval::minutes($diff)->cascade()->forHumans()
         ]);
+    }
+
+    public static function recalculateVersions()
+    {
+        Cache::forget('release-scheduler-version');
     }
 
     private static function initialVersion(): array

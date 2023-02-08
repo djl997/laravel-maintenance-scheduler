@@ -31,6 +31,6 @@ class MaintenanceModeDisabledListener
             $release->status = ReleaseSchedule::STATUS_COMPLETED;
             $release->duration_in_minutes = $release->release_at->diffInMinutes();
             $release->save();
-        }        
+        }
     }
 }
