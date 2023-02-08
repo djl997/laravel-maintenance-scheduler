@@ -112,6 +112,24 @@ class ReleaseSchedule extends Model
 
     public static function recalculateVersions()
     {
+        ReleaseSchedule::all()->groupBy('major')->each(function($minorVersions) {
+            $minor = 0;
+
+            $minorVersions->sortBy('release_at')->groupBy('minor')->each(function($patchVersions) use (&$minor) {
+                $patch = 0;
+
+                $patchVersions->sortBy('release_at')->each(function($patchVersion) use ($minor, &$patch) {
+                    $patchVersion->minor = $minor;
+                    $patchVersion->patch = $patch;
+                    $patchVersion->save();
+
+                    $patch++;
+                });
+
+                $minor++;
+            });
+        });
+
         Cache::forget('release-scheduler-version');
     }
 

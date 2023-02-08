@@ -6,6 +6,7 @@ use Djl997\LaravelReleaseScheduler\Console\Commands\{
     CreateReleaseCommand,
     ListReleasesCommand,
     DeleteReleaseCommand,
+    RecalculateVersionsCommand,
 };
 use Djl997\LaravelReleaseScheduler\Providers\EventServiceProvider;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +33,7 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
                 CreateReleaseCommand::class,
                 ListReleasesCommand::class,
                 DeleteReleaseCommand::class,
+                RecalculateVersionsCommand::class,
             ]);
 
             $this->publishes([

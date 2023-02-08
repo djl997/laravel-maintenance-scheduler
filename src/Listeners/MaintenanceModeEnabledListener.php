@@ -50,7 +50,7 @@ class MaintenanceModeEnabledListener
             ReleaseSchedule::where([
                 'major' => $release->major,
                 'minor' => $release->minor,
-            ])->where('release_at', '>', $release->release_at)->orderBy('release_at')->get()->each(function($release) use (&$nextVersion) {
+            ])->where('release_at', '>', $release->release_at)->orderBy('release_at')->get()->each(function($release) use ($nextVersion) {
                 $release->patch = ++ $nextVersion['patch'];
                 $release->save();
             });
