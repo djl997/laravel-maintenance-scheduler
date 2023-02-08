@@ -42,10 +42,14 @@ class DeleteReleaseCommand extends Command
      */
     public function handle()
     {
-        $release = ReleaseSchedule::find($this->argument('release'))->delete();
-                
-        $this->info("The release is deleted!");
+        $confirmed = $this->confirm('All versions will be recalculated. Are you sure to delete this release?');
 
+        if($confirmed) {
+            ReleaseSchedule::findOrFail($this->argument('release'))->delete();
+
+            $this->info("The release is deleted and all versions are recalculated.");
+        }
+        
         return Command::SUCCESS;
     }
 }
