@@ -15,7 +15,7 @@ return new class extends Migration
             $table->smallInteger('minor')->default(0); // version minor number
             $table->string('patch'); // version patch number
             
-            $table->timestamp('release_at')->nullable();
+            $table->timestamp('release_at')->unique()->nullable();
             $table->smallInteger('duration_in_minutes')->default(15);
 
             $table->string('description')->nullable();
