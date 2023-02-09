@@ -32,6 +32,14 @@ You can use this package in your project via composer:
 ```bash
 composer require djl997/laravel-release-scheduler
 ```
+
+### Light version
+In the light version, you don't need any database tables. Just configure the version via the `config/release-scheduler.php` config file:
+```
+php artisan vendor:publish --tag=lrs-config
+```
+
+### Full version
 Publish migration files:
 ```
 php artisan vendor:publish --tag=lrs-migrations

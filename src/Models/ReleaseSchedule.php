@@ -24,11 +24,22 @@ class ReleaseSchedule extends Model
     /**
      * Static functions
      */
-    public static function getCurrentVersion()
+    public static function getCurrentVersion(): self
     {
-        return Cache::rememberForever('release-scheduler-version', function() { 
-            return self::where('status', ReleaseSchedule::STATUS_COMPLETED)->orderByDesc('release_at')->first();
-        });
+        try {
+            return Cache::rememberForever('release-scheduler-version', function() { 
+                return self::where('status', ReleaseSchedule::STATUS_COMPLETED)->orderByDesc('release_at')->first();
+            });
+        } catch(\Illuminate\Database\QueryException $e) {
+            $version = self::initialVersion();
+
+            $release = (new ReleaseSchedule);
+            $release->major = $version['major'];
+            $release->minor = $version['minor'];
+            $release->patch = $version['patch'];
+
+            return $release;
+        }
     }
 
     public static function getNextMinorVersion($absolute = true): array
