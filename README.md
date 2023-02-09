@@ -79,7 +79,7 @@ php artisan vendor:publish --tag=lrs-config
 ```
 
 ## Events
-Laravel Release Scheduler doesn't dispatch it's own events. In stead we hook into the default Laravel Artisan Events: `MaintenanceModeEnabledListener` and `MaintenanceModeDisabledListener`. Of course you can do this too.
+Laravel Release Scheduler doesn't dispatch it's own events. In stead we hook into the default Laravel Artisan Events: `MaintenanceModeEnabled` and `MaintenanceModeDisabled`. Of course you can do this too.
 
 In addition, you can observe the ReleaseSchedule model in your application's `App\Providers\EventServiceProvider` class:
 
