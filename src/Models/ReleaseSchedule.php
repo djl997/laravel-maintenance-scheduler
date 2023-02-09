@@ -14,9 +14,9 @@ class ReleaseSchedule extends Model
     const STATUS_FAILED = 'failed';
 
     protected $table = 'release_schedule';
-    protected $dates = [ 'release_at' ];
     protected $casts = [ 
-        'changelog' => 'json'
+        'changelog' => 'json',
+        'release_at' => 'datetime'
     ];
     protected $fillable = [ 'status' ];
 
@@ -82,7 +82,11 @@ class ReleaseSchedule extends Model
 
     public static function getMaintenanceMessage(): string|null
     {
-        $activeRelease = self::active()->first();
+        try {
+            $activeRelease = self::active()->first();
+        } catch(\Illuminate\Database\QueryException $e) {
+            return null;
+        }
         
         if(is_null($activeRelease)) {
             $firstScheduledRelease = self::scheduled()->soon()->orderBy('release_at')->first();
