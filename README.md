@@ -18,6 +18,7 @@ Here is a rough roadmap of things to come (not in any specific order):
 
 - [ ] Generate changelog.md file
 - [ ] Improve setup
+- [ ] Create cancel command
 - [x] Connect recalculation to initial version
 - [x] Configure initial version
 - [x] Add current version to app layout (+how to)

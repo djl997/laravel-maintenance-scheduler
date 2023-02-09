@@ -11,7 +11,7 @@ class ReleaseSchedule extends Model
     const STATUS_SCHEDULED = 'scheduled';
     const STATUS_ACTIVE = 'active';
     const STATUS_COMPLETED = 'completed';
-    const STATUS_FAILED = 'failed';
+    const STATUS_CANCELLED = 'cancelled';
 
     protected $table = 'release_schedule';
     protected $casts = [ 
@@ -195,7 +195,7 @@ class ReleaseSchedule extends Model
     }
     public function scopeNotFailed($query)
     {
-        $query->whereNotIn('status', [ReleaseSchedule::STATUS_CONCEPT, ReleaseSchedule::STATUS_FAILED]);
+        $query->whereNotIn('status', [ReleaseSchedule::STATUS_CONCEPT, ReleaseSchedule::STATUS_CANCELLED]);
     }
 
     /**
