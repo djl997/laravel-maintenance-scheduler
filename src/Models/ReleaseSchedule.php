@@ -128,7 +128,7 @@ class ReleaseSchedule extends Model
                     $patchVersion->patch = $patch;
                     $patchVersion->save();
 
-                    $patch++;
+                    $patch = ++ $patch; // patch can be string
                 });
 
                 $minor++;
