@@ -55,7 +55,7 @@ php artisan releases:recalculate # Recalculate version structure (semver)
 To activate maintenance mode, run the default Laravel command `php artisan down`. Laravel Release Scheduler will search for scheduled releases scoped to that date and activate them. Note if no releases were scheduled, there will automatically be an unscheduled release created and activated.
 
 ### Disable Maintenance Mode:
-To deactivate maintenance mode, run `php artisan up`. Laravel Release Scheduler will complete the active release and make it available for the changelog. You can copy-paste this e.g. to Github.
+To deactivate maintenance mode, run `php artisan up`. Laravel Release Scheduler will complete the active release and make it available for a changelog. You can copy-paste this for example to Github.
 
 ### Show maintenance message:
 ```php
@@ -70,13 +70,23 @@ use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
 
 $version = ReleaseSchedule::getCurrentVersion();
 ```
-The value is cached in Laravel Cache to prevent unnecessary queries to the database.
-
+The value is cached in Laravel Cache to prevent unnecessary queries to the database. If the incorrect version is showed you can try to run `php artisan cache:clear` or `php artisan optimize:clear` and check if it will work after that.
 
 ## Custom Configuration
 If you want to change the [default config](config/config.php) you can publish the config file:
 ```
 php artisan vendor:publish --tag=lrs-config
+```
+
+## Events
+Laravel Release Scheduler doesn't dispatch it's own events. In stead we hook into the default Laravel Artisan Events: `MaintenanceModeEnabledListener` and `MaintenanceModeDisabledListener`. Of course you can do this too.
+
+In addition, you can observe the ReleaseSchedule model in your application's `App\Providers\EventServiceProvider` class:
+
+```php
+use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+
+ReleaseSchedule::observe(YourObserver::class);
 ```
 
 ## Changelog
