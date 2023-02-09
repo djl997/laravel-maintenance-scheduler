@@ -25,12 +25,14 @@ class MaintenanceModeDisabledListener
      */
     public function handle(MaintenanceModeDisabled $event)
     {
-        $releases = ReleaseSchedule::active()->get();
+        try {
+            $releases = ReleaseSchedule::active()->get();
 
-        foreach($releases as $release) {
-            $release->status = ReleaseSchedule::STATUS_COMPLETED;
-            $release->duration_in_minutes = $release->release_at->diffInMinutes();
-            $release->save();
-        }
+            foreach($releases as $release) {
+                $release->status = ReleaseSchedule::STATUS_COMPLETED;
+                $release->duration_in_minutes = $release->release_at->diffInMinutes();
+                $release->save();
+            }
+        } catch(\Exception $e) {}
     }
 }
