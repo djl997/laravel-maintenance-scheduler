@@ -31,7 +31,7 @@ class ReleaseSchedule extends Model
         });
     }
 
-    public static function getNextMinorVersion($absolute = true)
+    public static function getNextMinorVersion($absolute = true): array
     {
         if($absolute) {
             $latestRelease = ReleaseSchedule::orderByDesc('release_at')->orderByDesc('id')->notFailed()->first();
@@ -50,7 +50,7 @@ class ReleaseSchedule extends Model
         ];
     }
 
-    public static function getNextPatchVersion($absolute = true)
+    public static function getNextPatchVersion($absolute = true): array
     {
         if($absolute) {
             $latestRelease = ReleaseSchedule::orderByDesc('release_at')->orderByDesc('id')->notFailed()->first();
@@ -110,15 +110,20 @@ class ReleaseSchedule extends Model
         ]);
     }
 
-    public static function recalculateVersions()
+    public static function recalculateVersions(): void
     {
-        ReleaseSchedule::all()->groupBy('major')->each(function($minorVersions) {
-            $minor = 0;
+        $initialVersion = self::initialVersion();
 
-            $minorVersions->sortBy('release_at')->groupBy('minor')->each(function($patchVersions) use (&$minor) {
-                $patch = 0;
+        $major = $initialVersion['major'];
 
-                $patchVersions->sortBy('release_at')->each(function($patchVersion) use ($minor, &$patch) {
+        ReleaseSchedule::all()->sortBy('release_at')->groupBy('major')->each(function($minorVersions) use (&$major, $initialVersion) {
+            $minor = $major === $initialVersion['major'] ? $initialVersion['minor'] : 0;
+
+            $minorVersions->sortBy('release_at')->groupBy('minor')->each(function($patchVersions) use ($major, &$minor, $initialVersion) {
+                $patch = $minor === $initialVersion['minor'] ? $initialVersion['patch'] : 0;
+
+                $patchVersions->sortBy('release_at')->each(function($patchVersion) use ($major, $minor, &$patch) {
+                    $patchVersion->major = $major;
                     $patchVersion->minor = $minor;
                     $patchVersion->patch = $patch;
                     $patchVersion->save();
@@ -128,6 +133,8 @@ class ReleaseSchedule extends Model
 
                 $minor++;
             });
+
+            $major++;
         });
 
         Cache::forget('release-scheduler-version');

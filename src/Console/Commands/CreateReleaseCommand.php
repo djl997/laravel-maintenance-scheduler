@@ -60,7 +60,7 @@ class CreateReleaseCommand extends Command
         $release->major = $nextVersion['major'];
         $release->minor = $nextVersion['minor'];
         $release->patch = $nextVersion['patch'];
-
+        
         $release->save();
 
         $this->info('Version '. $release->version .' is created!');

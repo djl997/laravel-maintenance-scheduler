@@ -4,7 +4,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/djl997/laravel-release-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-release-scheduler)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-Laravel Release Scheduler is a package to manage your application versions, release schedule, changelog and maintenance mode. The goal is to inform end-users of the maintenance schedule and release notes. This package does not manage automated releases and/or release scripts and/or automatically publish generated changelogs.
+Laravel Release Scheduler is a package to manage your application versions, schedule releases, generate changelog and make maintenance mode more user friendly. The goal is to inform end-users of the maintenance schedule and release notes. This package will not manage automated releases and/or release scripts and/or automatically publish generated changelogs.
 
 ## Features
 - Generate scheduled human readable maintenance messages.
@@ -49,6 +49,7 @@ php artisan migrate
 php artisan releases:list # List all releases
 php artisan releases:create # Wizard to create and schedule a new release
 php artisan releases:delete {releaseID} # Delete one specific release by ID
+php artisan releases:recalculate # Recalculate version structure (semver)
 ```
 ### Enable Maintenance Mode:
 To activate maintenance mode, run the default Laravel command `php artisan down`. Laravel Release Scheduler will search for scheduled releases scoped to that date and activate them. Note if no releases were scheduled, there will automatically be an unscheduled release created and activated.
