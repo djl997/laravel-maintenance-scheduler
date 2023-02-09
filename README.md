@@ -17,8 +17,9 @@ Laravel Release Scheduler is a package to manage your application versions, sche
 Here is a rough roadmap of things to come (not in any specific order):
 
 - [ ] Generate changelog.md file
-- [ ] Configure initial version
-- [ ] Connect recalculation to initial version
+- [ ] Improve setup
+- [x] Connect recalculation to initial version
+- [x] Configure initial version
 - [x] Add current version to app layout (+how to)
 - [x] Configure first version
 - [x] Translations (EN, NL, DE)
