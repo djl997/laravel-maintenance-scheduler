@@ -1,5 +1,5 @@
 {
-    "name": "djl997/laravel-release-scheduler",
+    "name": "djl997/laravel-maintenance-scheduler",
     "description": "Package to manage application version, schedule maintenance, version changelog and maintenance mode.",
 	"keywords": ["laravel", "schedule-maintenance", "maintenance-mode"],    
     "license": "MIT",
