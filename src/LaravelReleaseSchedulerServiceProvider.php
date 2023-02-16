@@ -3,6 +3,7 @@
 namespace Djl997\LaravelReleaseScheduler;
 
 use Djl997\LaravelReleaseScheduler\Console\Commands\{
+    InstallCommand,
     CreateReleaseCommand,
     ListReleasesCommand,
     DeleteReleaseCommand,
@@ -30,6 +31,7 @@ class LaravelReleaseSchedulerServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
+                InstallCommand::class,
                 CreateReleaseCommand::class,
                 ListReleasesCommand::class,
                 DeleteReleaseCommand::class,

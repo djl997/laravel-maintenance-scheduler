@@ -17,8 +17,8 @@ Laravel Release Scheduler is a package to manage your application versions, sche
 Here is a rough roadmap of things to come (not in any specific order):
 
 - [ ] Generate changelog.md file
-- [ ] Improve setup
 - [ ] Create cancel command
+- [x] Improve setup
 - [x] Connect recalculation to initial version
 - [x] Configure initial version
 - [x] Add current version to app layout (+how to)
@@ -49,6 +49,11 @@ php artisan vendor:publish --tag=lrs-migrations
 Migrate the required database table `release_schedule`:
 ```bash
 php artisan migrate
+```
+
+Install first version.
+```bash
+php artisan releases:install
 ```
 
 ## Usage
@@ -87,6 +92,7 @@ If you want to change the [default config](config/config.php) you can publish th
 ```
 php artisan vendor:publish --tag=lrs-config
 ```
+After editting the config file, please run `php artisan releases:recalculate`. All versions should be updated to your new structure.
 
 ## Events
 Laravel Release Scheduler doesn't dispatch it's own events. In stead we hook into the default Laravel Artisan Events: `MaintenanceModeEnabled` and `MaintenanceModeDisabled`. Of course you can do this too.
