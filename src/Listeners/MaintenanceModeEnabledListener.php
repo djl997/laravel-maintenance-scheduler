@@ -47,7 +47,7 @@ class MaintenanceModeEnabledListener
                 $maintenance->description = $unscheduledMessage;
                 $maintenance->status = MaintenanceSchedule::STATUS_ACTIVE;
 
-                // Recalculate scheduled patch releases 
+                // Recalculate scheduled patch versions 
                 MaintenanceSchedule::where([
                     'major' => $maintenance->major,
                     'minor' => $maintenance->minor,

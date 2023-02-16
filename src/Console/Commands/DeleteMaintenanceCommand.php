@@ -16,14 +16,14 @@ class DeleteMaintenanceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'maintenance:delete {release : The ID of the release}';
+    protected $signature = 'maintenance:delete {version : The ID of the version}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete one specific release.';
+    protected $description = 'Delete one specific version by ID.';
 
     /**
      * Create a new command instance.
@@ -42,12 +42,12 @@ class DeleteMaintenanceCommand extends Command
      */
     public function handle()
     {
-        $confirmed = $this->confirm('All versions will be recalculated. Are you sure to delete this release?');
+        $confirmed = $this->confirm('All versions will be recalculated. Are you sure to delete this version?');
 
         if($confirmed) {
-            MaintenanceSchedule::findOrFail($this->argument('release'))->delete();
+            MaintenanceSchedule::findOrFail($this->argument('version'))->delete();
 
-            $this->info("The release is deleted and all versions are recalculated.");
+            $this->info("The version is deleted and all versions are recalculated.");
         }
         
         return Command::SUCCESS;

@@ -20,9 +20,9 @@ return [
     | Coming soon
     |--------------------------------------------------------------------------
     |
-    | Sometimes you want to be able to plan a release in advance without 
+    | Sometimes you want to be able to plan maintenance in advance without 
     | anyone seeing a notification. Laravel Maintenance Scheduler considers 
-    | releases as 'coming soon' when they are within the scope of 7 days. 
+    | maintenance as 'coming soon' when they are within the scope of 7 days. 
     | 
     | Note: This only applies if you are using MaintenanceSchedule::getMaintenanceMessage()
     |

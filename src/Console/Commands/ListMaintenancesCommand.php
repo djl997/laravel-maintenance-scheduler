@@ -19,7 +19,7 @@ class ListMaintenancesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'List all maintenance in the past, present or future.';
+    protected $description = 'List all versions in the past, present or future.';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class ListMaintenancesCommand extends Command
      */
     public function handle()
     {
-        $releases = MaintenanceSchedule::orderByDesc('maintenance_at')->get();
+        $versions = MaintenanceSchedule::orderByDesc('maintenance_at')->get();
 
         $statusColors = [
             'concept' => 'gray',
@@ -48,15 +48,15 @@ class ListMaintenancesCommand extends Command
             'failed' => 'red',
         ];
 
-        $releaseData = $releases->map(function($release) use ($statusColors) {
-            $color = $statusColors[$release->status];
+        $versionData = $versions->map(function($version) use ($statusColors) {
+            $color = $statusColors[$version->status];
             
             return [
-                $release->id,
-                $release->version,
-                $release->maintenance_at->format('Y-m-d H:i'),
-                "<fg=$color>$release->status</>",
-                $release->description,
+                $version->id,
+                $version->version,
+                $version->maintenance_at->format('Y-m-d H:i'),
+                "<fg=$color>$version->status</>",
+                $version->description,
             ];
         })->toArray();
 
@@ -66,7 +66,7 @@ class ListMaintenancesCommand extends Command
             'Date', 
             'Status',
             'Description', 
-        ], $releaseData);
+        ], $versionData);
 
         return Command::SUCCESS;
     }

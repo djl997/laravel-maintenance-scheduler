@@ -69,7 +69,7 @@ class CreateMaintenanceCommand extends Command
         $minutes = 15 + $minutes - $minutes % 15;
         $date = now()->startOfHour()->addMinutes($minutes)->format('Y-m-d H:i');
 
-        $maintenance->description = $this->ask('What is this release about? Please provide a short description');
+        $maintenance->description = $this->ask('Please provide a short description of the maintenance work.');
         $maintenance->maintenance_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Maintenance date (Y-m-d H:i)', $date));
         $maintenance->duration_in_minutes = (int) $this->ask('Duration in minutes', 15);
 
@@ -78,7 +78,7 @@ class CreateMaintenanceCommand extends Command
         } catch(\Illuminate\Database\QueryException $e) {
             $maintenance->delete();
 
-            $this->error('You have already scheduled a release for this time and date. Aborting.');
+            $this->error('You have already scheduled something for this time and date. Aborting.');
 
             return Command::FAILURE;
         }
@@ -127,7 +127,7 @@ class CreateMaintenanceCommand extends Command
             })->join("\n")
         ]]);
 
-        if (!$this->confirm('Do you wish to schedule this version release?', true)) {
+        if (!$this->confirm('Do you wish to schedule this version?', true)) {
             $this->info('Version '. $maintenance->version .' is saved as concept.');
             
             return Command::SUCCESS;

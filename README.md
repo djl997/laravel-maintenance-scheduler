@@ -1,10 +1,10 @@
 # Laravel Maintenance Scheduler
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/djl997/laravel-release-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-release-scheduler)
-[![Total Downloads](https://img.shields.io/packagist/dt/djl997/laravel-release-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-release-scheduler)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/djl997/laravel-maintenance-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-maintenance-scheduler)
+[![Total Downloads](https://img.shields.io/packagist/dt/djl997/laravel-maintenance-scheduler.svg?style=flat-square)](https://packagist.org/packages/djl997/laravel-maintenance-scheduler)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-Laravel Maintenance Scheduler is a package to manage your application versions, schedule maintenance, generate changelog and make maintenance mode more user friendly. The goal is to inform end-users of the maintenance schedule and release notes. This package will not manage automated releases and/or release scripts and/or automatically publish generated changelogs.
+Laravel Maintenance Scheduler is a package to manage your application versions, schedule maintenance, generate changelog and make maintenance mode more user friendly. The goal is to inform end-users about the maintenance schedule and version changes. This package will not manage automated releases and/or run release scripts and/or automatically publish generated changelogs.
 
 ## Features
 - Generate scheduled human readable maintenance messages.
@@ -16,7 +16,6 @@ Laravel Maintenance Scheduler is a package to manage your application versions, 
 ### Roadmap
 Here is a rough roadmap of things to come (not in any specific order):
 
-- [ ] Rename project to Laravel Maintenance Scheduler
 - [ ] Generate changelog.md file
 - [ ] Create cancel command
 - [x] Improve setup
@@ -36,7 +35,7 @@ composer require djl997/laravel-maintenance-scheduler
 ```
 
 ### Light version
-In the light version, you don't need any database tables. Just configure the version via the `config/release-scheduler.php` config file:
+In the light version, you don't need any database tables. Just configure the version via the `config/maintenance-scheduler.php` config file:
 ```
 php artisan vendor:publish --tag=maintenance-config
 ```
