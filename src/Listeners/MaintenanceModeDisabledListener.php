@@ -1,8 +1,8 @@
 <?php 
 
-namespace Djl997\LaravelReleaseScheduler\Listeners;
+namespace Djl997\LaravelMaintenanceScheduler\Listeners;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Foundation\Events\MaintenanceModeDisabled;
  
 class MaintenanceModeDisabledListener
@@ -26,12 +26,12 @@ class MaintenanceModeDisabledListener
     public function handle(MaintenanceModeDisabled $event)
     {
         try {
-            $releases = ReleaseSchedule::active()->get();
+            $maintenances = MaintenanceSchedule::active()->get();
 
-            foreach($releases as $release) {
-                $release->status = ReleaseSchedule::STATUS_COMPLETED;
-                $release->duration_in_minutes = $release->release_at->diffInMinutes();
-                $release->save();
+            foreach($maintenances as $maintenance) {
+                $maintenance->status = MaintenanceSchedule::STATUS_COMPLETED;
+                $maintenance->duration_in_minutes = $maintenance->maintenance_at->diffInMinutes();
+                $maintenance->save();
             }
         } catch(\Exception $e) {}
     }

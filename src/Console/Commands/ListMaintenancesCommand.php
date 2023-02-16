@@ -1,25 +1,25 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Console\Commands;
+namespace Djl997\LaravelMaintenanceScheduler\Console\Commands;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Console\Command;
 
-class ListReleasesCommand extends Command
+class ListMaintenancesCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'releases:list';
+    protected $signature = 'maintenance:list';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'List all releases in the past, present or future.';
+    protected $description = 'List all maintenance in the past, present or future.';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class ListReleasesCommand extends Command
      */
     public function handle()
     {
-        $releases = ReleaseSchedule::orderByDesc('release_at')->get();
+        $releases = MaintenanceSchedule::orderByDesc('maintenance_at')->get();
 
         $statusColors = [
             'concept' => 'gray',
@@ -54,7 +54,7 @@ class ListReleasesCommand extends Command
             return [
                 $release->id,
                 $release->version,
-                $release->release_at->format('Y-m-d H:i'),
+                $release->maintenance_at->format('Y-m-d H:i'),
                 "<fg=$color>$release->status</>",
                 $release->description,
             ];

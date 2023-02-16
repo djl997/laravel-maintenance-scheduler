@@ -1,8 +1,8 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Console\Commands;
+namespace Djl997\LaravelMaintenanceScheduler\Console\Commands;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Console\Command;
 
 class RecalculateVersionsCommand extends Command
@@ -12,7 +12,7 @@ class RecalculateVersionsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'releases:recalculate';
+    protected $signature = 'maintenance:recalculate';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class RecalculateVersionsCommand extends Command
      */
     public function handle()
     {
-        ReleaseSchedule::recalculateVersions();
+        MaintenanceSchedule::recalculateVersions();
 
         return Command::SUCCESS;
     }

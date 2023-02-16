@@ -21,10 +21,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | Sometimes you want to be able to plan a release in advance without 
-    | anyone seeing a notification. Laravel Release Scheduler considers 
+    | anyone seeing a notification. Laravel Maintenance Scheduler considers 
     | releases as 'coming soon' when they are within the scope of 7 days. 
     | 
-    | Note: This only applies if you are using ReleaseSchedule::getMaintenanceMessage()
+    | Note: This only applies if you are using MaintenanceSchedule::getMaintenanceMessage()
     |
     */
     'soonInDays' => 7,

@@ -1,8 +1,8 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Console\Commands;
+namespace Djl997\LaravelMaintenanceScheduler\Console\Commands;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Exception;
 use Illuminate\Console\Command;
 
@@ -17,7 +17,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'releases:install {--reset}';
+    protected $signature = 'maintenance:install {--reset}';
 
     /**
      * The console command description.
@@ -44,7 +44,7 @@ class InstallCommand extends Command
     public function handle()
     {
         try { 
-            DB::table('release_schedule')->exists();
+            DB::table('maintenance_schedule')->exists();
         } catch(\Illuminate\Database\QueryException $e) {
             $this->error('Table is not found.');
             $this->info('Did you run the migrations?');
@@ -59,28 +59,28 @@ class InstallCommand extends Command
                 return Command::SUCCESS;
             } 
 
-            ReleaseSchedule::truncate();
+            MaintenanceSchedule::truncate();
         }
 
-        if(ReleaseSchedule::count() > 0) {
+        if(MaintenanceSchedule::count() > 0) {
             $this->error('Initial version already exists. Aborting.');
-            $this->info('Please run the `releases:install --reset` command to truncate table.');
+            $this->info('Please run the `maintenance:install --reset` command to truncate table.');
 
             return Command::FAILURE;
         }
 
-        // Create initial release 
-        $release = (new ReleaseSchedule);
-        $release->major = ReleaseSchedule::getNextMinorVersion()['major'];
-        $release->minor = ReleaseSchedule::getNextMinorVersion()['minor'];
-        $release->patch = ReleaseSchedule::getNextMinorVersion()['patch'];
-        $release->release_at = now();
-        $release->duration_in_minutes = 0;
-        $release->description = 'Initial version';
-        $release->status = ReleaseSchedule::STATUS_COMPLETED;
-        $release->save();
+        // Create initial version 
+        $maintenance = (new MaintenanceSchedule);
+        $maintenance->major = MaintenanceSchedule::getNextMinorVersion()['major'];
+        $maintenance->minor = MaintenanceSchedule::getNextMinorVersion()['minor'];
+        $maintenance->patch = MaintenanceSchedule::getNextMinorVersion()['patch'];
+        $maintenance->maintenance_at = now();
+        $maintenance->duration_in_minutes = 0;
+        $maintenance->description = 'Initial version';
+        $maintenance->status = MaintenanceSchedule::STATUS_COMPLETED;
+        $maintenance->save();
 
-        $this->info('Version '. $release->version .' is created!');
+        $this->info('Version '. $maintenance->version .' is created!');
 
         return Command::SUCCESS;
     }

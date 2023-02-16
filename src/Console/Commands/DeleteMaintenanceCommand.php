@@ -1,22 +1,22 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Console\Commands;
+namespace Djl997\LaravelMaintenanceScheduler\Console\Commands;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Console\Command;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 
-class DeleteReleaseCommand extends Command
+class DeleteMaintenanceCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'releases:delete {release : The ID of the release}';
+    protected $signature = 'maintenance:delete {release : The ID of the release}';
 
     /**
      * The console command description.
@@ -45,7 +45,7 @@ class DeleteReleaseCommand extends Command
         $confirmed = $this->confirm('All versions will be recalculated. Are you sure to delete this release?');
 
         if($confirmed) {
-            ReleaseSchedule::findOrFail($this->argument('release'))->delete();
+            MaintenanceSchedule::findOrFail($this->argument('release'))->delete();
 
             $this->info("The release is deleted and all versions are recalculated.");
         }

@@ -1,8 +1,8 @@
 <?php 
 
-namespace Djl997\LaravelReleaseScheduler\Listeners;
+namespace Djl997\LaravelMaintenanceScheduler\Listeners;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Foundation\Events\MaintenanceModeEnabled;
  
 class MaintenanceModeEnabledListener
@@ -28,36 +28,36 @@ class MaintenanceModeEnabledListener
         try {
             $unscheduledMessage = __('Unscheduled maintenance');
             
-            $release = ReleaseSchedule::scheduled()->today()->where(function($query) use ($unscheduledMessage) {
+            $maintenance = MaintenanceSchedule::scheduled()->today()->where(function($query) use ($unscheduledMessage) {
                 $query->where('description', '!=', $unscheduledMessage);
                 $query->orWhereNull('description');
-            })->orderBy('release_at')->first();
+            })->orderBy('maintenance_at')->first();
             
-            if(!is_null($release)) {
-                $release->status = ReleaseSchedule::STATUS_ACTIVE;
-                $release->release_at = now();
+            if(!is_null($maintenance)) {
+                $maintenance->status = MaintenanceSchedule::STATUS_ACTIVE;
+                $maintenance->maintenance_at = now();
             } else {
-                $nextVersion = ReleaseSchedule::getNextPatchVersion(false);
+                $nextVersion = MaintenanceSchedule::getNextPatchVersion(false);
 
-                $release = (new ReleaseSchedule);
-                $release->major = $nextVersion['major'];
-                $release->minor = $nextVersion['minor'];
-                $release->patch = $nextVersion['patch'];
-                $release->release_at = now();
-                $release->description = $unscheduledMessage;
-                $release->status = ReleaseSchedule::STATUS_ACTIVE;
+                $maintenance = (new MaintenanceSchedule);
+                $maintenance->major = $nextVersion['major'];
+                $maintenance->minor = $nextVersion['minor'];
+                $maintenance->patch = $nextVersion['patch'];
+                $maintenance->maintenance_at = now();
+                $maintenance->description = $unscheduledMessage;
+                $maintenance->status = MaintenanceSchedule::STATUS_ACTIVE;
 
                 // Recalculate scheduled patch releases 
-                ReleaseSchedule::where([
-                    'major' => $release->major,
-                    'minor' => $release->minor,
-                ])->where('release_at', '>', $release->release_at)->orderBy('release_at')->get()->each(function($release) use ($nextVersion) {
-                    $release->patch = ++ $nextVersion['patch'];
-                    $release->save();
+                MaintenanceSchedule::where([
+                    'major' => $maintenance->major,
+                    'minor' => $maintenance->minor,
+                ])->where('maintenance_at', '>', $maintenance->maintenance_at)->orderBy('maintenance_at')->get()->each(function($maintenance) use ($nextVersion) {
+                    $maintenance->patch = ++ $nextVersion['patch'];
+                    $maintenance->save();
                 });
             }
 
-            $release->save();
+            $maintenance->save();
         } catch(\Exception $e) {}
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Providers;
+namespace Djl997\LaravelMaintenanceScheduler\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-use Djl997\LaravelReleaseScheduler\Listeners\{
+use Djl997\LaravelMaintenanceScheduler\Listeners\{
     MaintenanceModeEnabledListener,
     MaintenanceModeDisabledListener
 };
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
-use Djl997\LaravelReleaseScheduler\Observers\ReleaseScheduleObserver;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
+use Djl997\LaravelMaintenanceScheduler\Observers\MaintenanceScheduleObserver;
 use Illuminate\Foundation\Events\{
     MaintenanceModeEnabled,
     MaintenanceModeDisabled
@@ -35,6 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        ReleaseSchedule::observe(ReleaseScheduleObserver::class);
+        MaintenanceSchedule::observe(MaintenanceScheduleObserver::class);
     }
 }

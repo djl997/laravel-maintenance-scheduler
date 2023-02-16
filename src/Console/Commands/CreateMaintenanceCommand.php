@@ -1,29 +1,29 @@
 <?php
 
-namespace Djl997\LaravelReleaseScheduler\Console\Commands;
+namespace Djl997\LaravelMaintenanceScheduler\Console\Commands;
 
-use Djl997\LaravelReleaseScheduler\Models\ReleaseSchedule;
+use Djl997\LaravelMaintenanceScheduler\Models\MaintenanceSchedule;
 use Illuminate\Console\Command;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 
-class CreateReleaseCommand extends Command
+class CreateMaintenanceCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'releases:create';
+    protected $signature = 'maintenance:create';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create and schedule a new release including the changelog.';
+    protected $description = 'Create and schedule a new maintenance time including the changelog.';
 
     /**
      * Create a new command instance.
@@ -42,8 +42,8 @@ class CreateReleaseCommand extends Command
      */
     public function handle()
     {
-        $release = (new ReleaseSchedule);
-        $release->status = ReleaseSchedule::STATUS_CONCEPT;
+        $maintenance = (new MaintenanceSchedule);
+        $maintenance->status = MaintenanceSchedule::STATUS_CONCEPT;
         
         $versionType = $this->choice(
             'Are you making a Minor Release or a Patch?',
@@ -52,31 +52,31 @@ class CreateReleaseCommand extends Command
         );
 
         if($versionType == 'Patch') {
-            $nextVersion = ReleaseSchedule::getNextPatchVersion();
+            $nextVersion = MaintenanceSchedule::getNextPatchVersion();
         } else {
-            $nextVersion = ReleaseSchedule::getNextMinorVersion();
+            $nextVersion = MaintenanceSchedule::getNextMinorVersion();
         }
 
-        $release->major = $nextVersion['major'];
-        $release->minor = $nextVersion['minor'];
-        $release->patch = $nextVersion['patch'];
+        $maintenance->major = $nextVersion['major'];
+        $maintenance->minor = $nextVersion['minor'];
+        $maintenance->patch = $nextVersion['patch'];
         
-        $release->save();
+        $maintenance->save();
 
-        $this->info('Version '. $release->version .' is created!');
+        $this->info('Version '. $maintenance->version .' is created!');
 
         $minutes = (int) now()->format('i') + 2;
         $minutes = 15 + $minutes - $minutes % 15;
         $date = now()->startOfHour()->addMinutes($minutes)->format('Y-m-d H:i');
 
-        $release->description = $this->ask('What is this release about? Please provide a short description');
-        $release->release_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Release date (Y-m-d H:i)', $date));
-        $release->duration_in_minutes = (int) $this->ask('Duration in minutes', 15);
+        $maintenance->description = $this->ask('What is this release about? Please provide a short description');
+        $maintenance->maintenance_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Maintenance date (Y-m-d H:i)', $date));
+        $maintenance->duration_in_minutes = (int) $this->ask('Duration in minutes', 15);
 
         try {
-            $release->save();
+            $maintenance->save();
         } catch(\Illuminate\Database\QueryException $e) {
-            $release->delete();
+            $maintenance->delete();
 
             $this->error('You have already scheduled a release for this time and date. Aborting.');
 
@@ -107,8 +107,8 @@ class CreateReleaseCommand extends Command
                 return !empty($item->join(''));
             })->toArray();
             
-            $release->changelog = $changelog;
-            $release->save();
+            $maintenance->changelog = $changelog;
+            $maintenance->save();
         }
 
         $this->table([
@@ -118,25 +118,25 @@ class CreateReleaseCommand extends Command
             'Description', 
             'Changelog', 
         ], [[
-            $release->version,
-            $release->release_at->format('Y-m-d H:i'),
-            $release->release_at->addMinutes($release->duration_in_minutes)->format('Y-m-d H:i'),
-            $release->description,
-            collect($release->changelog)->map(function($item, $key) { 
+            $maintenance->version,
+            $maintenance->maintenance_at->format('Y-m-d H:i'),
+            $maintenance->maintenance_at->addMinutes($maintenance->duration_in_minutes)->format('Y-m-d H:i'),
+            $maintenance->description,
+            collect($maintenance->changelog)->map(function($item, $key) { 
                 return ucfirst($key). ': '. implode("\n".ucfirst($key).": ", $item); 
             })->join("\n")
         ]]);
 
         if (!$this->confirm('Do you wish to schedule this version release?', true)) {
-            $this->info('Version '. $release->version .' is saved as concept.');
+            $this->info('Version '. $maintenance->version .' is saved as concept.');
             
             return Command::SUCCESS;
         }
         
-        $release->status = ReleaseSchedule::STATUS_SCHEDULED;
-        $release->save();
+        $maintenance->status = MaintenanceSchedule::STATUS_SCHEDULED;
+        $maintenance->save();
 
-        $this->info("Version $release->version is scheduled! ID: $release->id.");
+        $this->info("Version $maintenance->version is scheduled! ID: $maintenance->id.");
 
         return Command::SUCCESS;
     }

@@ -8,14 +8,14 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('release_schedule', function (Blueprint $table) {
+        Schema::create('maintenance_schedule', function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->smallInteger('major')->default(1); // version major number
             $table->smallInteger('minor')->default(0); // version minor number
             $table->string('patch'); // version patch number
             
-            $table->timestamp('release_at')->unique()->nullable();
+            $table->timestamp('maintenance_at')->unique()->nullable();
             $table->smallInteger('duration_in_minutes')->default(15);
 
             $table->string('description')->nullable();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('release_schedule');
+        Schema::dropIfExists('maintenance_schedule');
     }
 };
