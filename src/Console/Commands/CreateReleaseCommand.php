@@ -73,7 +73,15 @@ class CreateReleaseCommand extends Command
         $release->release_at = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->ask('Release date (Y-m-d H:i)', $date));
         $release->duration_in_minutes = (int) $this->ask('Duration in minutes', 15);
 
-        $release->save();
+        try {
+            $release->save();
+        } catch(\Illuminate\Database\QueryException $e) {
+            $release->delete();
+
+            $this->error('You have already scheduled a release for this time and date. Aborting.');
+
+            return Command::FAILURE;
+        }
 
         if ($this->confirm('Do you want to create the changelog interactively?', false)) {
             $this->info("<bg=white>Please divide multiple items with vertical pipe without spaces. E.g. 'Functionality to create an user|Functionality to change password'</>");
